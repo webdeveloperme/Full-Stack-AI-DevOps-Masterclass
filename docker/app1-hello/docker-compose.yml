@@ -1,0 +1,16 @@
+services:
+  hello-py:
+    build: ./python
+    image: ritesh07p/hello-python:1.0
+    ports:
+      - "3000:3000"
+    environment:
+      - ENV_VALUE=${ENV_VALUE}
+
+  hello-node:
+    build: ./node
+    image: ritesh07p/hello-node:1.0
+    ports:
+      - "3001:3000"
+    environment:
+      - ENV_VALUE=${ENV_VALUE}

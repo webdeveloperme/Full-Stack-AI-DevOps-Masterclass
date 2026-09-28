@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  labels:
+    app: myapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp
+spec:
+  selector:
+    app: myapp
+  type: LoadBalancer
+  ports:
+    - port: 80        # external port exposed by the Service
+      targetPort: 80  # must match containerPort inside the pod

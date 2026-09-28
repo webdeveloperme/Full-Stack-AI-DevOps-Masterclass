@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tax-service-a
+  labels:
+    app: tax-service-a
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tax-service-a
+  template:
+    metadata:
+      labels:
+        app: tax-service-a
+    spec:
+      containers:
+        - name: tax-service-a
+          image: embarkx/tax-service-a:latest   # <-- changed image name
+          ports:
+            - containerPort: 3000              # <-- matches default port from docs
+          env:
+            - name: TAX_SERVICE_URL
+              value: http://tax-service-b:4000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tax-service-a
+spec:
+  selector:
+    app: tax-service-a
+  type: LoadBalancer
+  ports:
+    - port: 80        # external port exposed by the Service
+      targetPort: 3000 # must match containerPort inside the pod
